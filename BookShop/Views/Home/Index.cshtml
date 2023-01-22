@@ -1,0 +1,58 @@
+﻿@model List<BookShop.Models.Entities.Product>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .button-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="product-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Author
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductDetail.Author)
+                    </td>
+                    <td class="button-container">
+                        <input class="btn btn-primary" type="button" value="Add to cart"
+                           onclick="$.post('@(Url.Action("AddToCart", new { productId = item.Id}))')" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>

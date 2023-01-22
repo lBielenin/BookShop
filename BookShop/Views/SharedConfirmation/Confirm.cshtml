@@ -1,0 +1,23 @@
+﻿@using BookShop.Models.PageModels
+@model ConfirmationPageModel;
+<style>
+    .center {
+        margin: auto;
+        width: 60%;
+    }
+    .confirm-bar {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<div class="center">
+    <div>
+        <h2>@Model.Message</h2>
+    </div>
+        <form action="@Model.ConfirmUrl" method="@(Model.ConfirmationMethod)" class="form-container">
+            <div class="confirm-bar">
+                <input class="btn btn-primary"type="submit" value="OK" />
+                <a href="@Model.RejectUrl"><input class="btn btn-danger" type="button" value="Nope" /> </a>
+            </div>
+        </form>
+</div>

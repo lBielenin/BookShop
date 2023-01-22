@@ -1,0 +1,54 @@
+﻿@using BookShop.Models.Entities
+@model List<Product>
+
+@{
+    ViewBag.PickedModel = null;
+}
+
+<div class="product-container">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Author
+                    </th>
+                    <th>
+                        Price
+                    </th> 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr onclick="location.href='@(Url.Action("Edit", new { id = item.Id }))'">
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                         <td>
+                             @Html.DisplayFor(modelItem => item.ProductDetail.Author)
+                        </td> 
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.Id })"><input class="btn btn-info" type="button" value="Edit" /> </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Delete", new { id = item.Id })"><input class="btn btn-danger" type="button" value="Delete" /> </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+        <a href="@Url.Action("Create")"><input class="btn btn-primary" type="button" value="Create New Product" /> </a>
+
+    </div>
+    <div>
+</div>

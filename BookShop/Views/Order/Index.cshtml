@@ -1,0 +1,101 @@
+﻿@using BookShop.Models.ValidationModels
+@model OrderValidationModel
+<script>
+    function updateQuantity(id) {
+        const newQuantity = $('#model' + id).val();
+        console.log(newQuantity);
+        const data = { id, newQuantity };
+        $.post('@(Url.Action("UpdateQuantity"))', data);
+    }
+</script>
+<style>
+    .form-centered {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<div class="product-container">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Author
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.BasketItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <input id="model@(item.Id)" type="number" value="@item.Quantity" onchange="updateQuantity(@(item.Id))" />
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Delete", new { id = item.Id })"><input class="btn btn-danger" type="button" value="Delete" /> </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+    <div>
+    </div>
+    <div>
+    </div>
+</div>
+<div class="form-centered">
+    <form asp-action="Create" method="post" class="form-container ">
+        <div>
+            <label asp-for="Details.Name"></label>
+            <input asp-for="Details.Name" />
+        </div>
+        <div>
+            <label asp-for="Details.Surname"></label>
+            <input asp-for="Details.Surname" />
+        </div>
+        <div>
+            <label asp-for="Details.Email"></label>
+            <input asp-for="Details.Email"></input>
+        </div>
+        <div>
+            <label asp-for="Details.StreetName"></label>
+            <input asp-for="Details.StreetName"></input>
+        </div>
+        <div>
+            <label asp-for="Details.StreetNumber"></label>
+            <input asp-for="Details.StreetNumber"></input>
+        </div>
+        <div>
+            <label asp-for="Details.City"></label>
+            <input asp-for="Details.City"></input>
+        </div>
+        <div>
+            <label asp-for="Details.PostalCode"></label>
+            <input asp-for="Details.PostalCode"></input>
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit"></input>
+        </div>
+    </form>
+</div>
