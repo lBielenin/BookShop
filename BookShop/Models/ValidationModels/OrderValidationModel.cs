@@ -5,8 +5,8 @@ namespace BookShop.Models.ValidationModels
 {
     public class OrderValidationModel
     {
-        public List<BasketModel> BasketItems { get; set; }
-        public OrderDetailsValidationModel Details { get; set; }
+        public List<BasketModel> BasketItems { get; set; } = new();
+        public OrderDetailsValidationModel Details { get; set; } = new();
 
         internal Order ToOrderEntityModel(Email email)
         {

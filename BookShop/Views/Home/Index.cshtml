@@ -10,8 +10,8 @@
     }
 </style>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Black Books!</h1>
+    <p>Please, pick a book!</p>
 </div>
 
 <div class="product-container">
@@ -47,7 +47,7 @@
                     </td>
                     <td class="button-container">
                         <input class="btn btn-primary" type="button" value="Add to cart"
-                           onclick="$.post('@(Url.Action("AddToCart", new { productId = item.Id}))')" />
+                           onclick="$.post('@(Url.Action("AddToCart", new { productId = item.Id}))'); updateBasketQuantity();" />
                     </td>
                 </tr>
             }

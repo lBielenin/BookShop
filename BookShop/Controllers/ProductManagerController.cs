@@ -5,6 +5,7 @@ using BookShop.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
 
 namespace BookShop.Controllers
 {
@@ -29,12 +30,20 @@ namespace BookShop.Controllers
 
 
         [HttpGet("Create")]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(IEnumerable<string> messages = null)
         {
+            ProductValidationModel model = null;
+            if(messages is not null && messages.Count() > 0)
+            {
+                ViewBag.ErrorMessages = messages;
+                model = JsonSerializer.Deserialize<ProductValidationModel>(HttpContext.Session.GetString("CreateProduct"));
+
+            }
+
             List<Genre>? genres = await productService.GetGenres();
             ViewBag.Genres = new SelectList(genres, "Id", "Name");
 
-            return View();
+            return View(model);
         }
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
@@ -42,6 +51,20 @@ namespace BookShop.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    IEnumerable<string> messages = 
+                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage));
+
+                    HttpContext.Session.SetString("CreateProduct",JsonSerializer.Serialize(product));
+
+                    return RedirectToAction("Create",
+                    new
+                    {
+                        messages = messages,
+                        model = product
+                    });
+                }
                 await productService.CreateNewProduct(product);
 
                 return RedirectToAction("Message", "SharedConfirmation", 
@@ -61,13 +84,9 @@ namespace BookShop.Controllers
             return View();
         }
 
-
-        // POST: ProductController/Create
-
         [HttpGet("Edit")]
         public async Task<ActionResult> Edit(int id)
         {
-            //var model = await productService.GetProduct(id);
             var product = await productService.GetProduct(id);
             List<Genre>? genres = await productService.GetGenres();
             var pickedIndex = genres.IndexOf(genres.First(g => g.Id == product.ProductDetail.Genre.Id));
@@ -94,10 +113,6 @@ namespace BookShop.Controllers
         public IActionResult Delete(int id)
         {
             var confirmUrl = Url.Action($"/Delete/{id}");
-            //string confirmUrl,
-            //string message,
-            //string rejectUrl,
-            //string confirmationMethod)
             return RedirectToAction("Confirm", "SharedConfirmation",
                 new
                 {
@@ -108,14 +123,12 @@ namespace BookShop.Controllers
                 });
         }
 
-        // POST: ProductController/Delete/5
         [HttpPost("Delete/{id}")]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> DeletePost(int id)
         {
             try
             {
-                //await this.productService.DeleteProduct(id);
 
                 return RedirectToAction("Message", "SharedConfirmation",
                     new

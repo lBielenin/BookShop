@@ -24,6 +24,11 @@ public class ProductService : IProductService
         await _productRepository.InsertProductAsync(product);
     }
 
+    public async Task CreateNewProduct(Product model)
+    {
+        await _productRepository.InsertProductAsync(model);
+    }
+
     public async Task DeleteProduct(int id)
     {
         var product = await _productRepository.GetById(id);
@@ -50,6 +55,11 @@ public class ProductService : IProductService
         var genre = await _genresRepository.GetGenreById(model.GenreId);
         var product = Product.Create(model, genre);
 
+        await _productRepository.Update(product);
+    }
+
+    public async Task UpdateProduct(Product product)
+    {
         await _productRepository.Update(product);
     }
 }

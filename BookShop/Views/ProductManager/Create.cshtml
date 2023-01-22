@@ -5,28 +5,72 @@
 
 <h1>Create new product</h1>
 
-<form asp-action="Create" method="post" class="form-container">
-    <div >
-        <label asp-for="Name"></label>
-        <input asp-for="Name" />
+@if (ViewBag.ErrorMessages is null)
+{
+    <form asp-action="Create" method="post" class="form-container">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+
+        </div>
+        <div>
+            <label asp-for="Price"></label>
+            <input asp-for="Price" />
+        </div>
+        <div>
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description"></textarea>
+        </div>
+        <div>
+            <label asp-for="Author"></label>
+            <textarea asp-for="Author"></textarea>
+        </div>
+        <div>
+            @Html.DropDownListFor(m => m.GenreId,(SelectList)ViewBag.Genres, "Pick a genre")
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit"></input>
+        </div>
+    </form>
+}
+else
+{
+    <form asp-action="Create" method="post" class="form-container">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" value="@Model.Name"/>
+
+        </div>
+        <div>
+            <label asp-for="Price"></label>
+            <input asp-for="Price" type="number" value="@Model.Price"/>
+        </div>
+        <div>
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" value="@Model.Description"></textarea>
+        </div>
+        <div>
+            <label asp-for="Author"></label>
+            <input asp-for="Author" value="@Model.Author"></input>
+        </div>
+        <div>
+            @Html.DropDownListFor(m => m.GenreId,(SelectList)ViewBag.Genres, "Pick a genre")
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit"></input>
+        </div>
+    </form>
+}
+
+@if (ViewBag.ErrorMessages is not null)
+{
+    <div class="text-danger">
+        @foreach (var message in ViewBag.ErrorMessages)
+        {
+            <div>
+                @message
+            </div>
+        }
     </div>
-    <div>
-        <label asp-for="Price"></label>
-        <input asp-for="Price" />
-    </div>
-    <div>
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description"></textarea>
-    </div>
-    <div>
-        <label asp-for="Author"></label>
-        <textarea asp-for="Author"></textarea>
-    </div>
-    <div>
-        @Html.DropDownListFor(m => m.GenreId,(SelectList)ViewBag.Genres, "Pick a genre")
-    </div>
-    <div>
-        <input class="btn btn-primary" type="submit"></input>
-    </div>
-</form>
+}
 

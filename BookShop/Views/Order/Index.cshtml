@@ -64,6 +64,11 @@
     <div>
     </div>
 </div>
+
+
+
+@if (ViewBag.ErrorMessages is null)
+{
 <div class="form-centered">
     <form asp-action="Create" method="post" class="form-container ">
         <div>
@@ -99,3 +104,55 @@
         </div>
     </form>
 </div>
+}
+else
+{
+   <div class="form-centered">
+    <form asp-action="Create" method="post" class="form-container ">
+        <div>
+            <label asp-for="Details.Name" ></label>
+            <input asp-for="Details.Name" value="@Model.Details.Name"/>
+        </div>
+        <div>
+            <label asp-for="Details.Surname"></label>
+            <input asp-for="Details.Surname" value="@Model.Details.Surname"/>
+        </div>
+        <div>
+            <label asp-for="Details.Email"></label>
+            <input asp-for="Details.Email" value="@Model.Details.Email"></input>
+        </div>
+        <div>
+            <label asp-for="Details.StreetName"></label>
+            <input asp-for="Details.StreetName" value="@Model.Details.StreetName"></input>
+        </div>
+        <div>
+            <label asp-for="Details.StreetNumber"></label>
+            <input asp-for="Details.StreetNumber" type="number" value="@Model.Details.StreetNumber"></input>
+        </div>
+        <div>
+            <label asp-for="Details.City"></label>
+            <input asp-for="Details.City" value="@Model.Details.City"></input>
+        </div>
+        <div>
+            <label asp-for="Details.PostalCode"></label>
+            <input asp-for="Details.PostalCode" value="@Model.Details.PostalCode"></input>
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit"></input>
+        </div>
+    </form>
+</div>
+}
+
+@if (ViewBag.ErrorMessages is not null)
+{
+    <div class="text-danger">
+        @foreach (var message in ViewBag.ErrorMessages)
+        {
+            <div>
+                @message
+            </div>
+        }
+    </div>
+}
+

@@ -18,18 +18,20 @@ builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IEmailRepository, EmailRepository>();
+builder.Services.AddTransient<IQuestionsService, QuestionsService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
-}).AddRoles<IdentityRole>()
+})
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.IdleTimeout = TimeSpan.FromHours(12);
     options.Cookie.IsEssential = true;
 
 });
@@ -57,9 +59,6 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

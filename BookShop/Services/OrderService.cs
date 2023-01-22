@@ -24,5 +24,30 @@ namespace BookShop.Services
             Order order = orderValidatioModel.ToOrderEntityModel(email);
             await orderRepository.CreateOrder(order);
         }
+
+        public async Task CreateNewOrder(Order order)
+        {
+            await orderRepository.CreateOrder(order);
+        }
+
+        public async Task DeleteOrder(int id)
+        {
+            await orderRepository.DeleteOrder(id);
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            return await orderRepository.GetById(id);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        {
+            return await orderRepository.GetAllAsync();
+        }
+
+        public async Task UpdateOrder(Order order)
+        {
+            await orderRepository.UpdateAsync(order);
+        }
     }
 }

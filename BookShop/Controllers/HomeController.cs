@@ -34,8 +34,6 @@ namespace BookShop.Controllers
         [Route("")]
         public async Task<IActionResult> Index()
         {
-            var basket = HttpContext.Session.GetString(nameof(Basket));
-            var test = User.IsInRole("Administrator");
             //if(User is not null)
             //{
             //    await roleManager.CreateAsync(new IdentityRole()

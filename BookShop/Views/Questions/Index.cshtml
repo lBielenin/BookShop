@@ -1,0 +1,33 @@
+﻿@using BookShop.Models.ValidationModels
+@model QuestionFormModel;
+
+<form asp-action="Post" asp-controller="Questionsa" method="post" class="form-container">
+    <div>
+        <label asp-for="Header"></label>
+        <input asp-for="Header"/>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label asp-for="Question"></label>
+        <textarea asp-for="Question" ></textarea>
+    </div>
+    <div>
+        <input class="btn btn-primary" type="submit"> />
+    </div>
+</form>
+
+@if (ViewBag.ErrorMessages is not null)
+{
+    <div class="text-danger">
+        @foreach (var message in ViewBag.ErrorMessages)
+        {
+            <div>
+                @message
+            </div>
+        }
+    </div>
+}
+

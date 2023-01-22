@@ -17,7 +17,15 @@ namespace BookShop.Services
         public void AddToBasket(BasketModel product)
         {
             var basket = GetBasket();
-            basket.Items.Add(product);
+            if(basket.Items.Any(item => item.Id == product.Id))
+            {
+                var item = basket.Items.First(prdouct => product.Id == product.Id);
+                item.Quantity++;
+            } 
+            else
+            {
+                basket.Items.Add(product);
+            }
             SaveBasket(basket);
         }
 
@@ -34,7 +42,7 @@ namespace BookShop.Services
         public int GetBasketCount()
         {
             var basket = GetBasket();
-            return basket is null ? 0 : basket.Items.Count;
+            return basket is null ? 0 : basket.Items.Select(i => i.Quantity).Sum();
         }
 
         public void RemoveFromBasket(int productId)

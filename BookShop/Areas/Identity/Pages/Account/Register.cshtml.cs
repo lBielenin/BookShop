@@ -116,17 +116,6 @@ namespace BookShop.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                await _roleManager.CreateAsync(new IdentityRole()
-                {
-                    Name = "Client",
-                    NormalizedName = "Client"
-                });
-
-                await _roleManager.CreateAsync(new IdentityRole()
-                {
-                    Name = "Administartor",
-                    NormalizedName = "Administrator"
-                });
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -136,8 +125,6 @@ namespace BookShop.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var defaultrole = _roleManager.FindByNameAsync("Default").Result;
 
                     if (defaultrole != null)

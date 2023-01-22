@@ -3,6 +3,16 @@
 @using Microsoft.AspNetCore.Http
 @using System.Text.Json
 @inject IBasketService basketService
+<script>
+    function updateBasketQuantity() {
+        let text = $("#basket").first().text();
+        console.log(text);
+        let oldNum = parseInt(text.slice(-2)[0]);
+        let newNum = oldNum+1;
+
+        $("#basket").text("Basket (" + newNum + ")");
+    }
+</script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,17 +39,17 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Questions" asp-action="Index">Ask a question!</a>
                         </li>
-                        @if(User.IsInRole("Administrator"))
+                        @if (User.IsInRole("Administrator"))
                         {
                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductManager" asp-action="Index">Product Manager</a>
-                        </li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ProductManager" asp-action="Index">Product Manager</a>
+                            </li>
                         }
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Basket" asp-action="Index">Basket (@(basketService.GetBasketCount()))</a>
+                            <a id="basket" class="nav-link text-dark" asp-area="" asp-controller="Basket" asp-action="Index">Basket (@(basketService.GetBasketCount()))</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

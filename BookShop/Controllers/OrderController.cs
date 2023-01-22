@@ -1,6 +1,7 @@
 ﻿using BookShop.Models.ValidationModels;
 using BookShop.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BookShop.Controllers
 {
@@ -17,11 +18,22 @@ namespace BookShop.Controllers
         }
 
         [Route("")]
-        public IActionResult Index()
+        public IActionResult Index(IEnumerable<string> messages = null)
         {
+            OrderDetailsValidationModel model = null;
+            if (messages is not null && messages.Count() > 0)
+            {
+                ViewBag.ErrorMessages = messages;
+                var stringCreateOrder = HttpContext.Session.GetString("CreateOrder");
+                if(stringCreateOrder is not null)
+                    model = JsonSerializer.Deserialize<OrderDetailsValidationModel>(stringCreateOrder);
+
+            }
+
             var validationModel = new OrderValidationModel
             {
-                BasketItems = basketService.GetAllBasket()
+                BasketItems = basketService.GetAllBasket(),
+                Details = model
             };
 
             return View(validationModel);
@@ -30,15 +42,37 @@ namespace BookShop.Controllers
         [Route("Create")]
         public async Task<IActionResult> Create(OrderValidationModel orderValidatioModel)
         {
-            orderValidatioModel.BasketItems = basketService.GetAllBasket();
-            await orderService.CreateNewOrder(orderValidatioModel);
-            basketService.ClearBasket();
-            return RedirectToAction("Message", "SharedConfirmation",
-            new
+            
+            try
             {
-                message = "You succesfully created new product!",
-                confirmUrl = Url.Action("Index", "Home")
-            });
+                if (!ModelState.IsValid)
+                {
+                    IEnumerable<string> messages =
+                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage));
+
+                    HttpContext.Session.SetString("CreateOrder", JsonSerializer.Serialize(orderValidatioModel.Details));
+
+                    return RedirectToAction("Index",
+                    new
+                    {
+                        messages = messages
+                    });
+                }
+                orderValidatioModel.BasketItems = basketService.GetAllBasket();
+                await orderService.CreateNewOrder(orderValidatioModel);
+                basketService.ClearBasket();
+
+                return RedirectToAction("Message", "SharedConfirmation",
+                new
+                {
+                    message = "You succesfully created submitted an order!",
+                    confirmUrl = Url.Action("Index", "Home")
+                });
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }
