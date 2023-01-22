@@ -4,6 +4,7 @@
 @{
     ViewBag.PickedModel = null;
 }
+<h2> Product Manager </h2>
 
 <div class="product-container">
     <div>
@@ -18,7 +19,7 @@
                     </th>
                     <th>
                         Price
-                    </th> 
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -29,9 +30,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                         <td>
-                             @Html.DisplayFor(modelItem => item.ProductDetail.Author)
-                        </td> 
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductDetail.Author)
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
@@ -51,4 +52,5 @@
 
     </div>
     <div>
+    </div>
 </div>

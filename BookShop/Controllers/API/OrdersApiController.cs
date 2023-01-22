@@ -7,11 +7,11 @@ namespace BookShop.Controllers.API
 {
     [Route("api/Orders")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class OrdersApiController : ControllerBase
     {
         private readonly IOrderService orderService;
 
-        public OrdersController(IProductService productService)
+        public OrdersApiController(IOrderService orderService)
         {
             this.orderService = orderService;
         }

@@ -11,5 +11,6 @@ namespace BookShop.Services
         Task<Order> GetOrderByIdAsync(int id);
         Task UpdateOrder(Order order);
         Task DeleteOrder(int id);
+        Task<IEnumerable<Order>> GetOrdersByEmail(string email);
     }
 }

@@ -1,5 +1,6 @@
 using BookShop.Data;
 using BookShop.Services;
+using BookShop.SwaggerFilters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IEmailRepository, EmailRepository>();
 builder.Services.AddTransient<IQuestionsService, QuestionsService>();
+
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
@@ -52,6 +54,7 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -60,5 +63,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapRazorPages();
-
 app.Run();

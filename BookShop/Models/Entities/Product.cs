@@ -10,6 +10,16 @@ public class Product : Entity
     public double Price { get; set; }
     public ProductDetail ProductDetail { get; set; }
 
+    public void Update(Product product)
+    {
+        Name = product.Name;
+        Price = product.Price;
+        ProductDetail.Description = product.ProductDetail.Description;
+        ProductDetail.Genre = product.ProductDetail.Genre;
+        ProductDetail.Description = product.ProductDetail.Description;
+        ProductDetail.Genre = product.ProductDetail.Genre;
+    }
+
     internal static Product Create(ProductValidationModel model, Genre genre)
     {
         return new Product()
@@ -20,7 +30,8 @@ public class Product : Entity
             {
                 Author = model.Author,
                 Description = model.Description,
-                Genre = genre
+                Genre = genre,
+                Id = model.ProductDetailId
             }
         };
     }
@@ -33,7 +44,9 @@ public class Product : Entity
             Description = ProductDetail.Description,
             GenreId = ProductDetail.Genre.Id,
             Name = Name,
-            Price = Price
+            Price = Price,
+            Id = Id,
+            ProductDetailId = ProductDetail.Id
         };
     }
 

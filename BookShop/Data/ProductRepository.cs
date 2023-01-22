@@ -31,7 +31,11 @@ public class ProductRepository : IProductRepository
 
     public async Task Update(Product product)
     {
-        _dbContext.Update(product);
+        Product? toUpdate = 
+            _dbContext.Products.Include(p => p.ProductDetail.Genre).First(product => product.Id == product.Id);
+        toUpdate.Update(product);
+
+        _dbContext.Update(toUpdate);
         await _dbContext.SaveChangesAsync();
     }
 

@@ -45,6 +45,11 @@ namespace BookShop.Services
             return await orderRepository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetOrdersByEmail(string email)
+        {
+            return await orderRepository.GetByEmail(email);
+        }
+
         public async Task UpdateOrder(Order order)
         {
             await orderRepository.UpdateAsync(order);

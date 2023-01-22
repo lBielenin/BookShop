@@ -15,62 +15,74 @@
         margin: auto;
         width: 60%;
     }
+
     .confirm-bar {
         display: flex;
         justify-content: center
     }
 </style>
 
-<div class="product-container">
-    <div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Author
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<h2> Basket </h2>
+
+@if (Model.Any())
+{
+    <div class="product-container">
+        <div>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Author)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            <input id="model@(item.Id)" type="number" value="@item.Quantity" onchange="updateQuantity(@(item.Id))" />
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Delete", new { id = item.Id })"><input class="btn btn-danger" type="button" value="Delete" /> </a>
-                        </td>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Author
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
                     </tr>
-                }
-            </tbody>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Author)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                <input id="model@(item.Id)" type="number" value="@item.Quantity" onchange="updateQuantity(@(item.Id))" />
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Delete", new { id = item.Id })"><input class="btn btn-danger" type="button" value="Delete" /> </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
 
-        </table>
+            </table>
 
+        </div>
+        <div>
+        </div>
+        <div>
+        </div>
     </div>
-    <div>
+    <div class="confirm-bar">
+        <a href="@Url.Action("Index", "Order")"><input class="btn btn-primary" type="button" value="Review and place the order"></input></a>
     </div>
-    <div>
-    </div>
-</div>
-<div class="confirm-bar">
-    <a href="@Url.Action("Index", "Order")" ><input class="btn btn-primary" type="button" value="Review and place the order"></input></a>
-</div>
+
+}
+else
+{
+    <h2 class="confirm-title"> Basket is empty! </h2>
+}
+

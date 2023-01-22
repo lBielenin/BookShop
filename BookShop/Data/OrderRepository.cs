@@ -27,7 +27,21 @@ namespace BookShop.Data
 
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
-            return await context.Orders.ToListAsync();
+            return await context.Orders
+                .Include(o => o.OrderProducts)
+                .Include(o => o.Email)
+                .Include(o => o.Address)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetByEmail(string email)
+        {
+            return await context.Orders
+                .Include(o => o.OrderProducts)
+                .Include(o => o.Email)
+                .Include(o => o.Address)
+                .Where(o => o.Email.EmailAddress == email)
+                .ToListAsync();
         }
 
         public async Task<Order> GetById(int id)
@@ -39,5 +53,6 @@ namespace BookShop.Data
         {
             context.Orders.Update(order);
         }
+
     }
 }

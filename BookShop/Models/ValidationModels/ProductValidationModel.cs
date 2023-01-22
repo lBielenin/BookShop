@@ -6,6 +6,7 @@ namespace BookShop.Models.ValidationModels
     public class ProductValidationModel
     {
         public int Id { get; set; }
+        public int ProductDetailId { get; set; }
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Name field should have length between 1 and 100!")]
         public string Name { get; set; }
         [Range(1, 500, ErrorMessage = "Price should be between 1 and 500!")]

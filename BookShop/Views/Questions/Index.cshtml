@@ -1,5 +1,6 @@
 ﻿@using BookShop.Models.ValidationModels
 @model QuestionFormModel;
+<h2> Send a question! </h2>
 
 <form asp-action="Post" asp-controller="Questionsa" method="post" class="form-container">
     <div>
@@ -15,7 +16,7 @@
         <textarea asp-for="Question" ></textarea>
     </div>
     <div>
-        <input class="btn btn-primary" type="submit"> />
+        <input class="btn btn-primary" type="submit" value="Submit">
     </div>
 </form>
 

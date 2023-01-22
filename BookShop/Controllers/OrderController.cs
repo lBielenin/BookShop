@@ -47,8 +47,9 @@ namespace BookShop.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    IEnumerable<string> messages =
-                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage));
+                    List<string> messages =
+                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage))
+                        .Where(name => name != "The value '' is invalid.").ToList();
 
                     HttpContext.Session.SetString("CreateOrder", JsonSerializer.Serialize(orderValidatioModel.Details));
 
@@ -58,20 +59,27 @@ namespace BookShop.Controllers
                         messages = messages
                     });
                 }
+
                 orderValidatioModel.BasketItems = basketService.GetAllBasket();
                 await orderService.CreateNewOrder(orderValidatioModel);
+
                 basketService.ClearBasket();
 
                 return RedirectToAction("Message", "SharedConfirmation",
                 new
                 {
-                    message = "You succesfully created submitted an order!",
+                    message = "You succesfully submitted an order!",
                     confirmUrl = Url.Action("Index", "Home")
                 });
             }
             catch
             {
-                return View();
+                return RedirectToAction("Message", "SharedConfirmation",
+                new
+                {
+                    message = "Error! Please contact administrator!",
+                    confirmUrl = Url.Action("Index", "Home")
+                });
             }
         }
     }

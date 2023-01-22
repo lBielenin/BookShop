@@ -8,5 +8,6 @@ public class Order : Entity
     public Email Email { get; set; }
     public Address Address { get; set; }
     public int? UserId { get; set; }
+    public DateTime CreationDate { get; set; } = DateTime.Now;
     public List<OrderProduct> OrderProducts { get; set; }
 }

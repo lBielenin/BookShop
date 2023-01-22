@@ -1,0 +1,47 @@
+﻿@using BookShop.Models.Entities
+@model IEnumerable<Order>
+
+@{
+    ViewBag.PickedModel = null;
+}
+<h2> My Orders </h2>
+
+<div class="product-container">
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Order Id
+                    </th>
+                    <th>
+                        Total Price
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr >
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+    <div>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 using BookShop.Models.PageModels;
 using BookShop.Models.ValidationModels;
 using BookShop.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using System.Text.Json;
 namespace BookShop.Controllers
 {
     [Route("ProductManager")]
+    [Authorize(Roles = "Administrator")]
     public class ProductManagerController : Controller
     {
         private readonly IProductService productService;
@@ -53,8 +55,12 @@ namespace BookShop.Controllers
             {
                 if(!ModelState.IsValid)
                 {
-                    IEnumerable<string> messages = 
-                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage));
+                    List<string> messages = 
+                        ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage))
+                        .Where(name => name != "The value '' is invalid.").ToList();
+
+                    if (product.GenreId == 0)
+                        messages.Add("Pick a genre.");
 
                     HttpContext.Session.SetString("CreateProduct",JsonSerializer.Serialize(product));
 
@@ -74,7 +80,12 @@ namespace BookShop.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction("Message", "SharedConfirmation",
+                new
+                {
+                    message = "Error! Please contact administrator!",
+                    confirmUrl = Url.Action("Index", "ProductManager")
+                });
             }
         }
 
@@ -85,12 +96,14 @@ namespace BookShop.Controllers
         }
 
         [HttpGet("Edit")]
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, IEnumerable<string> messages)
         {
             var product = await productService.GetProduct(id);
             List<Genre>? genres = await productService.GetGenres();
             var pickedIndex = genres.IndexOf(genres.First(g => g.Id == product.ProductDetail.Genre.Id));
             ViewBag.Genres = new SelectList(genres, "Id", "Name", pickedIndex);
+            if (messages is not null && messages.Any())
+                ViewBag.ErrorMessages = messages;
 
             var valid = product.ToProductValidationModel();
             return View(valid);
@@ -99,20 +112,51 @@ namespace BookShop.Controllers
         [HttpPost("Edit")]
         public async Task<ActionResult> Edit(ProductValidationModel product)
         {
-            if(ModelState.IsValid)
+            try
             {
-                await productService.UpdateProduct(product);
+                if (ModelState.IsValid)
+                {
+                    await productService.UpdateProduct(product);
+                }
+                else
+                {
+                    List<string> messages =
+                           ModelState.Values.SelectMany(val => val.Errors.Select(err => err.ErrorMessage))
+                           .Where(name => name != "The value '' is invalid.").ToList();
+
+                    if (product.GenreId == 0)
+                        messages.Add("Pick a genre.");
+
+                    return RedirectToAction("Edit",
+                    new
+                    {
+                        id = product.Id,
+                        messages = messages
+                    });
+                }
 
             }
-            return View();
+            catch
+            {
+                return RedirectToAction("Message", "SharedConfirmation",
+                new
+                {
+                    message = "Error! Please contact administrator!",
+                    confirmUrl = Url.Action("Index", "ProductManager")
+                });
+            }
+           
+            return RedirectToAction("Message", "SharedConfirmation",
+            new
+            {
+                message = "You succesfully updated a product!",
+                confirmUrl = Url.Action("Index", "ProductManager")
+            });
         }
-
-        // POST: ProductController/Edit/5
 
         [HttpGet("Delete")]
         public IActionResult Delete(int id)
         {
-            var confirmUrl = Url.Action($"/Delete/{id}");
             return RedirectToAction("Confirm", "SharedConfirmation",
                 new
                 {
@@ -124,12 +168,11 @@ namespace BookShop.Controllers
         }
 
         [HttpPost("Delete/{id}")]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> DeletePost(int id)
         {
             try
             {
-
+                await productService.DeleteProduct(id);
                 return RedirectToAction("Message", "SharedConfirmation",
                     new
                     {
@@ -139,7 +182,12 @@ namespace BookShop.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction("Message", "SharedConfirmation",
+                new
+                {
+                    message = "Error! Please contact administrator!",
+                    confirmUrl = Url.Action("Index", "ProductManager")
+                });
             }
         }
     }

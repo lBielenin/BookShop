@@ -9,5 +9,6 @@ namespace BookShop.Data
         Task<Order> GetById(int id);
         Task<IEnumerable<Order>> GetAllAsync();
         Task UpdateAsync(Order order);
+        Task<IEnumerable<Order>> GetByEmail(string email);
     }
 }
